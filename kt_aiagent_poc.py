@@ -41,14 +41,20 @@ first_message = """
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [{"role": "assistant", "content": first_message}]
 
+
+agent_avater = Image.open('./agent.png')
 # Replicate Credentials
 with st.sidebar:
     st.title('K intelligence AI Agent')
 
 # Display or clear chat messages
 for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
+    if message["role"] == "assistant":
+        with st.chat_message(message["role"], avatar=agent_avater):
+            st.write(message["content"], unsafe_allow_html=True)
+    else:
+        with st.chat_message(message["role"]):
+            st.write(message["content"], unsafe_allow_html=True)
 
 
 def clear_chat_history():
@@ -73,8 +79,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
     if with_clear_container(submit_clicked):
 
         output_container = output_container.container()
-        # answer_container = output_container.chat_message("assistant", avatar=Image.open('./ktlogo.png'))
-        
+    
         placeholder = st.empty()
         placeholder.info("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
         # placeholder.markdown("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
@@ -128,8 +133,8 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 related_questions += f"- {question}\n"
             response_text += f"<br><br> 💡 **이런 연관 질문은 어떠세요?**\n\n{related_questions}"
 
-        answer_container = output_container.chat_message("assistant")
-        answer_container.markdown(response_text, unsafe_allow_html=True)
+        answer_container = output_container.chat_message("assistant", avatar=agent_avater)
+        answer_container.write(response_text, unsafe_allow_html=True)
         message = {"role": "assistant", "content": response_text}
         st.session_state.messages.append(message)
         
