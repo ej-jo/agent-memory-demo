@@ -109,16 +109,16 @@ if st.session_state.messages[-1]["role"] != "assistant":
         if "sources" in final_answer and final_answer["sources"]:
             for source in final_answer["sources"]:
                 sources_text += f"- [{source['title']}]({source['url']})\n"
-            response_text += f"\n\n\n 🔗**출처**: \n\n{sources_text}"
+            response_text += f"<br><br><br> 🔗 **출처**: \n{sources_text}\n"
 
         related_questions = ""
         if "relatedQuestions" in final_answer and final_answer["relatedQuestions"]:
             for question in final_answer["relatedQuestions"]:
                 related_questions += f"- {question}\n"
-            response_text += f"\n\n\n 💡**이런 연관 질문은 어떠세요?**\n\n{related_questions}"
+            response_text += f"<br><br> 💡 **이런 연관 질문은 어떠세요?**\n\n{related_questions}"
 
         
-        answer_container.markdown(response_text)
+        answer_container.markdown(response_text, unsafe_allow_html=True)
         message = {"role": "assistant", "content": response_text}
         st.session_state.messages.append(message)
         status_message.empty()
