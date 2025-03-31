@@ -9,18 +9,17 @@ import libs as libs
 
 
 # App title
-st.set_page_config(page_title="KT AI Agent PoC", layout="wide")
+st.set_page_config(page_title="K intelligence AI Agent", layout="wide")
 
 first_message = """
-:두_손을_들고_있는_사람: 안녕하세요! 장사의 고수, 여러분의 AI 파트너! 저는 K intelligence AI Agent입니다.
-창업 준비 중이신가요? 가게 운영이 막막하신가요? 걱정은 이제 그만! 당신의 아이디어에 장사의 날개를 달아드릴게요.
-메뉴 선정부터, 손님 응대, 매출 관리, 홍보 전략까지! 실패는 줄이고, 성공 확률은 확 끌어올리는 진짜 장사 노하우를 전수해드립니다.
-:말풍선: 예를 들어, 이런 질문도 할 수 있어요:
-·      커피집 어떻게 매출을 올리나요?
-·      요식업 주방 설계는 어떻게 해야 해요?
-·      유튜브 광고는 어떻게 해야 효과가 좋을까요?
-지금 바로 질문해보세요! K intelligence AI Agent는 항상 여러분의 옆에 있습니다. 당신의 성공, 제가 함께 만들어 드릴게요! :로켓:
-K intelligence AI Agent
+🙌  안녕하세요! 장사의 고수, 여러분의 AI 파트너! 저는 K intelligence AI Agent입니다.\n
+창업 준비 중이신가요? 가게 운영이 막막하신가요? 걱정은 이제 그만! 당신의 아이디어에 장사의 날개를 달아드릴게요.\n
+메뉴 선정부터, 손님 응대, 매출 관리, 홍보 전략까지! 실패는 줄이고, 성공 확률은 확 끌어올리는 진짜 장사 노하우를 전수해드립니다.\n
+💬 예를 들어, 이런 질문도 할 수 있어요:\n
+·      커피집 어떻게 매출을 올리나요?\n
+·      요식업 주방 설계는 어떻게 해야 해요?\n
+·      유튜브 광고는 어떻게 해야 효과가 좋을까요?\n
+지금 바로 질문해보세요! K intelligence AI Agent는 항상 여러분의 옆에 있습니다. 당신의 성공, 제가 함께 만들어 드릴게요! 🚀
 """
 
 # Store LLM generated responses
@@ -29,7 +28,7 @@ if "messages" not in st.session_state.keys():
 
 # Replicate Credentials
 with st.sidebar:
-    st.title('소상공인 지원 Agent')
+    st.title('K intelligence AI Agent')
 
 # Display or clear chat messages
 for message in st.session_state.messages:
@@ -65,11 +64,6 @@ if st.session_state.messages[-1]["role"] != "assistant":
 
         placeholder = st.empty()
 
-        # curl -i \
-        # -H 'Content-Type: application/json' \
-        # -d '{"question": "오늘 서울 날씨는?", "chatHistory": [], "agentVer": "0.1", "curDate": "20250204 09:30", "userId": "user-id-20250204", "sessionId": "sessionid-20250204-0930"}' \
-        # -X POST https://aca-poc-smeagent.greenmoss-898b3e43.koreacentral.azurecontainerapps.io/chat/stream
-
         response = requests.post(
             "https://aca-poc-smeagent.greenmoss-898b3e43.koreacentral.azurecontainerapps.io/chat/stream",
             json={"question": user_input, "chatHistory": [], "agentVer": "0.1", "curDate": "20250204 09:30", "userId": "user-id-20250204", "sessionId": "sessionid-20250204-0930"},
@@ -95,8 +89,10 @@ if st.session_state.messages[-1]["role"] != "assistant":
                     st.warning(f"JSON 파싱 에러: {e}")
                     continue
         
+        
         message = {"role": "assistant", "content": response_text}
         st.session_state.messages.append(message)
         status_message.empty()
+        # placeholder.empty()
 
         submit_clicked = False
