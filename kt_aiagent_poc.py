@@ -141,9 +141,9 @@ if st.session_state.messages[-1]["role"] != "assistant":
 
             response_text = response_text.replace("###", "####")
             answer_container = output_container.chat_message("assistant", avatar=agent_avater)
-            final_response = final_answer["answer"].replace("\\n", "\n").replace("###", "####")
-            # answer_container.write(response_text, unsafe_allow_html=True)
-            answer_container.write(final_response, unsafe_allow_html=True)
+            # final_response = final_answer["answer"].replace("\\n", "\n").replace("###", "####")
+            answer_container.write(response_text, unsafe_allow_html=True)
+            # answer_container.write(final_response, unsafe_allow_html=True)
 
             message = {"role": "assistant", "content": response_text}
             st.session_state.messages.append(message)
