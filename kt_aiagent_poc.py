@@ -92,7 +92,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
         )
         placeholder.info("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
 
-        if response != 200:
+        if response.status_code != 200:
             output_container.warning("요청이 실패했습니다. 다시 시도해주세요.")
             placeholder.empty()
             submit_clicked = False
