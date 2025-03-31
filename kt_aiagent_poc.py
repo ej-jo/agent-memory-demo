@@ -36,7 +36,7 @@ for message in st.session_state.messages:
 
 
 def clear_chat_history():
-    st.session_state.messages = [{"role": "assistant", "content": "안녕하세요. KT AI Agent입니다. 무엇을 도와드릴까요?"}]
+    st.session_state.messages = [{"role": "assistant", "content": first_message}]
 st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
 submit_clicked = False
