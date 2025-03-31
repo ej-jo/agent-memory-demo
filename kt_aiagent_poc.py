@@ -13,14 +13,28 @@ from streamlit_agent.clear_results import with_clear_container
 st.set_page_config(page_title="K intelligence AI Agent", layout="wide")
 
 first_message = """
-🙌  안녕하세요! 장사의 고수, 여러분의 AI 파트너! 저는 K intelligence AI Agent입니다.\n
-창업 준비 중이신가요? 가게 운영이 막막하신가요? 걱정은 이제 그만! 당신의 아이디어에 장사의 날개를 달아드릴게요.\n
-메뉴 선정부터, 손님 응대, 매출 관리, 홍보 전략까지! 실패는 줄이고, 성공 확률은 확 끌어올리는 진짜 장사 노하우를 전수해드립니다.\n
-💬 예를 들어, 이런 질문도 할 수 있어요:\n
-·      커피집 어떻게 매출을 올리나요?\n
-·      요식업 주방 설계는 어떻게 해야 해요?\n
-·      유튜브 광고는 어떻게 해야 효과가 좋을까요?\n
-지금 바로 질문해보세요! K intelligence AI Agent는 항상 여러분의 옆에 있습니다. 당신의 성공, 제가 함께 만들어 드릴게요! 🚀
+🙌 **안녕하세요!**
+
+**장사의 고수, 여러분의 AI 파트너!**  
+저는 **K intelligence AI Agent**입니다.
+
+창업 준비 중이신가요? 가게 운영이 막막하신가요?  
+**걱정은 이제 그만!**  
+당신의 아이디어에 **장사의 날개를 달아드릴게요.**
+
+**메뉴 선정부터, 손님 응대, 매출 관리, 홍보 전략까지!**  
+실패는 줄이고, 성공 확률은 확 끌어올리는  
+**진짜 장사 노하우**를 전수해드립니다.
+
+💬 예를 들어, 이런 질문도 할 수 있어요:
+
+- 커피집 어떻게 매출을 올리나요?  
+- 요식업 주방 설계는 어떻게 해야 해요?  
+- 유튜브 광고는 어떻게 해야 효과가 좋을까요?
+
+지금 바로 질문해보세요!  
+**K intelligence AI Agent**는 항상 여러분의 옆에 있습니다.  
+당신의 성공, 제가 함께 만들어 드릴게요! 🚀
 """
 
 # Store LLM generated responses
@@ -57,8 +71,6 @@ if st.session_state.messages[-1]["role"] != "assistant":
     user_input = st.session_state.messages[-1]["content"]
     output_container = st.empty()
     if with_clear_container(submit_clicked):
-        status_message = st.empty()
-        # status_message.markdown("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
 
         output_container = output_container.container()
         # answer_container = output_container.chat_message("assistant", avatar=Image.open('./ktlogo.png'))
@@ -121,7 +133,5 @@ if st.session_state.messages[-1]["role"] != "assistant":
         answer_container.markdown(response_text, unsafe_allow_html=True)
         message = {"role": "assistant", "content": response_text}
         st.session_state.messages.append(message)
-        status_message.empty()
         
-
         submit_clicked = False
