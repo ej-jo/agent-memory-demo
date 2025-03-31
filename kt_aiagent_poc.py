@@ -75,10 +75,9 @@ if st.session_state.messages[-1]["role"] != "assistant":
         output_container = output_container.container()
         # answer_container = output_container.chat_message("assistant", avatar=Image.open('./ktlogo.png'))
         
-
-
         placeholder = st.empty()
-        placeholder.markdown("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
+        placeholder.info("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
+        # placeholder.markdown("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
 
         curDate = datetime.now().strftime("%Y%m%d %H:%M")
 
