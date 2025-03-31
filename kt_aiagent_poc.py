@@ -56,7 +56,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
     output_container = st.empty()
     if with_clear_container(submit_clicked):
         status_message = st.empty()
-        status_message.info("Agent가 분석 중입니다. 🔍 답변이 생성됩니다. ⏳")
+        # status_message.markdown("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
 
         output_container = output_container.container()
         # answer_container = output_container.chat_message("assistant", avatar=Image.open('./ktlogo.png'))
@@ -64,6 +64,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
 
 
         placeholder = st.empty()
+        placeholder.markdown("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
 
         response = requests.post(
             "https://aca-poc-smeagent.greenmoss-898b3e43.koreacentral.azurecontainerapps.io/chat/stream",
@@ -102,16 +103,16 @@ if st.session_state.messages[-1]["role"] != "assistant":
         placeholder.empty()
 
         sources_text = ""
-        if "sources" in final_answer:
+        if "sources" in final_answer and final_answer["sources"]:
             for source in final_answer["sources"]:
                 sources_text += f"[{source['title']}]({source['url']})\n\n"
-            response_text += f"\n\n\n출처: \n\n{sources_text}"
+            response_text += f"\n\n\n🔗 **출처**: \n\n{sources_text}"
 
         related_questions = ""
-        if "relatedQuestions" in final_answer:
+        if "relatedQuestions" in final_answer and final_answer["relatedQuestions"]:
             for question in final_answer["relatedQuestions"]:
                 related_questions += f"- {question}\n\n"
-            response_text += f"\n\n이런 질문은 어떠세요?\n\n{related_questions}"
+            response_text += f"\n\n💡**이런 연관 질문은 어떠세요?**\n\n{related_questions}"
 
         
         answer_container.markdown(response_text)
