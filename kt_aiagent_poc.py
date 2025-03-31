@@ -2,6 +2,8 @@ import streamlit as st
 import os, json
 import requests
 from PIL import Image
+from datetime import datetime
+
 
 
 from streamlit_agent.clear_results import with_clear_container
@@ -66,9 +68,11 @@ if st.session_state.messages[-1]["role"] != "assistant":
         placeholder = st.empty()
         placeholder.markdown("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
 
+        curDate = datetime.now().strftime("%Y%m%d %H:%M")
+
         response = requests.post(
             "https://aca-poc-smeagent.greenmoss-898b3e43.koreacentral.azurecontainerapps.io/chat/stream",
-            json={"question": user_input, "chatHistory": [], "agentVer": "0.1", "curDate": "20250204 09:30", "userId": "user-id-20250204", "sessionId": "sessionid-20250204-0930"},
+            json={"question": user_input, "chatHistory": [], "agentVer": "0.1", "curDate": curDate, "userId": "user-id-20250204", "sessionId": "sessionid-20250204-0930"},
             stream=True
         )
 
@@ -89,7 +93,6 @@ if st.session_state.messages[-1]["role"] != "assistant":
                         placeholder.markdown(f"{response_text}")
 
                     elif data.get("type") == "additionalInfo":
-                        # print("final: ", data.get("content"))
                         final_answer = data.get("content", "")
 
                     # elif data.get("type") == "message":
@@ -105,14 +108,14 @@ if st.session_state.messages[-1]["role"] != "assistant":
         sources_text = ""
         if "sources" in final_answer and final_answer["sources"]:
             for source in final_answer["sources"]:
-                sources_text += f"[{source['title']}]({source['url']})\n\n"
-            response_text += f"\n\n\n🔗 **출처**: \n\n{sources_text}"
+                sources_text += f"- [{source['title']}]({source['url']})\n"
+            response_text += f"\n\n\n 🔗**출처**: \n\n{sources_text}"
 
         related_questions = ""
         if "relatedQuestions" in final_answer and final_answer["relatedQuestions"]:
             for question in final_answer["relatedQuestions"]:
-                related_questions += f"- {question}\n\n"
-            response_text += f"\n\n💡**이런 연관 질문은 어떠세요?**\n\n{related_questions}"
+                related_questions += f"- {question}\n"
+            response_text += f"\n\n\n 💡**이런 연관 질문은 어떠세요?**\n\n{related_questions}"
 
         
         answer_container.markdown(response_text)
