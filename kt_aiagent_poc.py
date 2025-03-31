@@ -56,10 +56,12 @@ if st.session_state.messages[-1]["role"] != "assistant":
     output_container = st.empty()
     if with_clear_container(submit_clicked):
         status_message = st.empty()
-        status_message.info("에이전트에게 요청 중...")
+        status_message.info("Agent가 분석 중입니다. 🔍 답변이 생성됩니다. ⏳")
 
         output_container = output_container.container()
         # answer_container = output_container.chat_message("assistant", avatar=Image.open('./ktlogo.png'))
+        answer_container = output_container.chat_message("assistant")
+
 
         placeholder = st.empty()
 
@@ -70,6 +72,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
         )
 
         response_text = ""
+        final_answer = {}
 
         for line in response.iter_lines(decode_unicode=True):
             if line and line.startswith("data: "):
@@ -83,15 +86,38 @@ if st.session_state.messages[-1]["role"] != "assistant":
                         response_text += content
                         response_text = response_text.replace("\\n", "\n")
                         placeholder.markdown(f"{response_text}")
+
+                    elif data.get("type") == "additionalInfo":
+                        # print("final: ", data.get("content"))
+                        final_answer = data.get("content", "")
+
+                    # elif data.get("type") == "message":
+                    #     status = data.get("content")
+                    #     status_message.info(status)
                 
                 except json.JSONDecodeError as e:
                     st.warning(f"JSON 파싱 에러: {e}")
                     continue
         
+        placeholder.empty()
+
+        sources_text = ""
+        if "sources" in final_answer:
+            for source in final_answer["sources"]:
+                sources_text += f"[{source['title']}]({source['url']})\n\n"
+            response_text += f"\n\n\n출처: \n\n{sources_text}"
+
+        related_questions = ""
+        if "relatedQuestions" in final_answer:
+            for question in final_answer["relatedQuestions"]:
+                related_questions += f"- {question}\n\n"
+            response_text += f"\n\n이런 질문은 어떠세요?\n\n{related_questions}"
+
         
+        answer_container.markdown(response_text)
         message = {"role": "assistant", "content": response_text}
         st.session_state.messages.append(message)
         status_message.empty()
-        # placeholder.empty()
+        
 
         submit_clicked = False
