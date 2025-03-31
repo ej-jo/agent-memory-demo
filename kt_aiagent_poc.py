@@ -5,7 +5,6 @@ from PIL import Image
 
 
 from streamlit_agent.clear_results import with_clear_container
-import libs as libs
 
 
 # App title
