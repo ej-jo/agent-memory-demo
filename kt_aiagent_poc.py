@@ -74,7 +74,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
 
         output_container = output_container.container()
         # answer_container = output_container.chat_message("assistant", avatar=Image.open('./ktlogo.png'))
-        answer_container = output_container.chat_message("assistant")
+        
 
 
         placeholder = st.empty()
@@ -129,7 +129,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 related_questions += f"- {question}\n"
             response_text += f"<br><br> 💡 **이런 연관 질문은 어떠세요?**\n\n{related_questions}"
 
-        
+        answer_container = output_container.chat_message("assistant")
         answer_container.markdown(response_text, unsafe_allow_html=True)
         message = {"role": "assistant", "content": response_text}
         st.session_state.messages.append(message)
