@@ -87,7 +87,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
 
         response = requests.post(
             "https://aca-poc-smeagent.greenmoss-898b3e43.koreacentral.azurecontainerapps.io/chat/stream",
-            json={"question": user_input, "chatHistory": [], "agentVer": "0.1", "curDate": curDate, "userId": "user-id-20250204", "sessionId": "sessionid-20250204-0930"},
+            json={"question": user_input, "chatHistory": [], "agentVer": "0.1", "curDate": curDate, "userId": f"user-id-demo-stream-{curDate}", "sessionId": f"sessionid-demo-stream-{curDate}"},
             stream=True
         )
         placeholder.info("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
