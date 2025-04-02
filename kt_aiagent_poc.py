@@ -40,6 +40,8 @@ first_message = """
 # Store LLM generated responses
 if "messages" not in st.session_state.keys():
     st.session_state.messages = [{"role": "assistant", "content": first_message}]
+if "history" not in st.session_state.keys():
+    st.session_state.history = []
 
 
 agent_avater = Image.open('./agent.png')
@@ -59,6 +61,7 @@ for message in st.session_state.messages:
 
 def clear_chat_history():
     st.session_state.messages = [{"role": "assistant", "content": first_message}]
+    st.session_state.history = []
 st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
 submit_clicked = False
@@ -81,15 +84,15 @@ if st.session_state.messages[-1]["role"] != "assistant":
         output_container = output_container.container()
     
         placeholder = st.empty()
-        # placeholder.markdown("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
 
         curDate = datetime.now().strftime("%Y%m%d %H:%M")
 
         response = requests.post(
             "https://aca-poc-smeagent.greenmoss-898b3e43.koreacentral.azurecontainerapps.io/chat/stream",
-            json={"question": user_input, "chatHistory": [], "agentVer": "0.1", "curDate": curDate, "userId": f"user-id-demo-stream-{curDate}", "sessionId": f"sessionid-demo-stream-{curDate}"},
+            json={"question": user_input, "chatHistory": st.session_state.history, "agentVer": "0.1", "curDate": curDate, "userId": f"user-id-demo-stream-{curDate}", "sessionId": f"sessionid-demo-stream-{curDate}"},
             stream=True
         )
+
         placeholder.info("**Agent가 분석 중**입니다. 🔍 **답변이 생성됩니다.** ⏳")
 
         if response.status_code != 200:
@@ -127,6 +130,8 @@ if st.session_state.messages[-1]["role"] != "assistant":
             
             placeholder.empty()
 
+
+
             sources_text = ""
             if "sources" in final_answer and final_answer["sources"]:
                 for source in final_answer["sources"]:
@@ -141,11 +146,20 @@ if st.session_state.messages[-1]["role"] != "assistant":
 
             response_text = response_text.replace("###", "####")
             answer_container = output_container.chat_message("assistant", avatar=agent_avater)
-            # final_response = final_answer["answer"].replace("\\n", "\n").replace("###", "####")
+            final_response = final_answer["answer"].replace("\\n", "\n").replace("###", "####")
             answer_container.write(response_text, unsafe_allow_html=True)
             # answer_container.write(final_response, unsafe_allow_html=True)
 
             message = {"role": "assistant", "content": response_text}
             st.session_state.messages.append(message)
-            
+
+            chat_history = {
+                "inputs": {"question": f"{user_input}"}, "outputs": {"answer": f"{final_response}"}
+            }
+            st.session_state.history.append(chat_history)
+            st.session_state.history = st.session_state.history[-5:]
+
             submit_clicked = False
+
+
+
