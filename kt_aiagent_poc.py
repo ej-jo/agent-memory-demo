@@ -43,6 +43,7 @@ if "messages" not in st.session_state.keys():
 if "history" not in st.session_state.keys():
     st.session_state.history = []
 
+server_url = "https://sme-agent-server.greenmoss-898b3e43.koreacentral.azurecontainerapps.io"
 
 agent_avater = Image.open('./agent.png')
 # Replicate Credentials
@@ -88,7 +89,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
         curDate = datetime.now().strftime("%Y%m%d %H:%M")
 
         response = requests.post(
-            "https://aca-poc-smeagent.greenmoss-898b3e43.koreacentral.azurecontainerapps.io/chat/stream",
+            f"{server_url}/chat/stream",
             json={"question": user_input, "chatHistory": st.session_state.history, "agentVer": "0.1", "curDate": curDate, "userId": f"user-id-demo-stream-{curDate}", "sessionId": f"sessionid-demo-stream-{curDate}"},
             stream=True
         )
