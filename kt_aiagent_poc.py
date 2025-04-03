@@ -157,7 +157,7 @@ if st.session_state.messages[-1]["role"] != "assistant":
                 "inputs": {"question": f"{user_input}"}, "outputs": {"answer": f"{final_response}"}
             }
             st.session_state.history.append(chat_history)
-            st.session_state.history = st.session_state.history[-5:]
+            st.session_state.history = st.session_state.history[-10:]
 
             submit_clicked = False
 
